@@ -155,8 +155,6 @@ public class StGallerKantonalbankPDFExtractorTest
 
         var results = extractor.extract(PDFInputFile.loadTestCase(getClass(), "Dividende02.txt"), errors);
 
-        errors.forEach(Exception::printStackTrace);
-        
         assertThat(errors, empty());
         assertThat(countSecurities(results), is(1L));
         assertThat(countBuySell(results), is(0L));
