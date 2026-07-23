@@ -208,7 +208,7 @@ public class StGallerKantonalbankPDFExtractor extends AbstractPDFExtractor
                         // Umrechnungskurs EUR/USD 1.175393
                         // @formatter:on
                         .section("termCurrency", "baseCurrency", "exchangeRate", "fxGross").optional() //
-                        .match("^Betrag\\s+[A-Z]{3}\\s+(?<fxGross>['\\.,\\d]+)*$")
+                        .match("^Betrag\\s+[A-Z]{3}\\s+(?<fxGross>['\\.,\\d]+)\\s*$")
                         .match("^Umrechnungskurs\\s+(?<baseCurrency>[A-Z]{3})\\/(?<termCurrency>[A-Z]{3})\\s+(?<exchangeRate>[\\.'\\d]+)\\s*$")
                         .assign((t, v) -> {
                             var rate = asExchangeRate(v);
