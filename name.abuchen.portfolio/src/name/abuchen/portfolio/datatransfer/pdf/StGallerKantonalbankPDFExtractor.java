@@ -152,7 +152,7 @@ public class StGallerKantonalbankPDFExtractor extends AbstractPDFExtractor
                                                         .attributes("name", "nameContinued", "wkn", "isin", "currency") //
                                                         .find("Ihr Depotbestand per Ex\\-Datum .*") //
                                                         .match("^[\\.'\\d]+ (?<name>.*)$") //
-                                                        .match("(?<nameContinued>.*)$")
+                                                        .match("^(?<nameContinued>.*)$")
                                                         .match("^.* Valoren\\-Nr\\.: (?<wkn>[A-Z0-9]{5,9}), ISIN: (?<isin>[A-Z]{2}[A-Z0-9]{9}[0-9])$") //
                                                         .match("^Aussch.ttung: (?<currency>[A-Z]{3}) [\\.'\\d]+$") //
                                                         .assign((t, v) -> t.setSecurity(getOrCreateSecurity(v))) //
