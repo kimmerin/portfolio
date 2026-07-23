@@ -147,6 +147,7 @@ public class StGallerKantonalbankPDFExtractor extends AbstractPDFExtractor
                                             // 10'000 N-Akt Sibanye Stillwater Limited
                                             // Sponsored ADR Repr 4 Shs ADR/ADS
                                             // Übrige Aktien Valoren-Nr.: 52619625, ISIN: US82575P1075
+                                            // Ausschüttung: USD 0.310942
                                             // @formatter:on
                                                         .attributes("name", "nameContinued", "wkn", "isin", "currency") //
                                                         .find("Ihr Depotbestand per Ex\\-Datum .*") //
@@ -260,7 +261,7 @@ public class StGallerKantonalbankPDFExtractor extends AbstractPDFExtractor
                                         section -> section //
 
                                         // @formatter:off
-                                        // Quellensteuer 20% USD 1'243.77
+                                        // Quellensteuer 26.375% EUR 263.75
                                         // @formatter:on
                                                         .attributes("withHoldingTax", "currency") //
                                                         .match("^Quellensteuer [\\.,'\\d]+% (?<currency>[A-Z]{3}) (\\-)?(?<withHoldingTax>[\\.'\\d]+)$") //
