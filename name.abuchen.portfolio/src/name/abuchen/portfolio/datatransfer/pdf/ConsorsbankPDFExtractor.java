@@ -398,6 +398,36 @@ public class ConsorsbankPDFExtractor extends AbstractPDFExtractor
                             t.setNote(concatenate(t.getNote(), v.get("note1"), " | "));
                             t.setNote(concatenate(t.getNote(), v.get("note2"), " "));
                         })
+                        
+                        // @formatter:off
+                        // Der Abrechnung wurde der Poolfaktor 1,000000000 zugrunde gelegt
+                        // @formatter:on
+                        .section("note").optional() //
+                        .match("^Der Abrechnung wurde ein Poolfaktor von (?<note>[\\d.,]+) zugrunde gelegt\\s*$") //
+                        .assign((t, v) -> {
+                            double pool = asBigDecimal(v.get("note")).doubleValue();
+                            if (pool != 1)
+                            {
+                                t.setNote(concatenate(t.getNote(),
+                                                "Poolfaktor " + v.get("note").replaceAll("[,.]?0+$", ""), " | "));
+                            }
+                        })
+
+                        // @formatter:off
+                        // Einheit Umsatz Poolfaktor
+                        // EUR 1.000.000,00000 0,904761904
+                        // @formatter:on
+                        .section("note").optional() //
+                        .match("^Einheit Umsatz Poolfaktor\\s*$") //
+                        .match("^[A-Z]{3}\\s+[\\d,.]+\\s+(?<note>[\\d,.]+)\\s*$") //
+                        .assign((t, v) -> {
+                            double pool = asBigDecimal(v.get("note")).doubleValue();
+                            if (pool != 1)
+                            {
+                                t.setNote(concatenate(t.getNote(),
+                                                "Poolfaktor " + v.get("note").replaceAll("[,.]?0+$", ""), " | "));
+                            }
+                        })
 
                         .wrap(t -> {
                             if (t.getPortfolioTransaction().getCurrencyCode() != null && t.getPortfolioTransaction().getAmount() == 0)
@@ -478,7 +508,7 @@ public class ConsorsbankPDFExtractor extends AbstractPDFExtractor
                                                         .match("^(?<currency>[A-Z]{3})\\s+[\\.,\\d]+\\s+WKN:\\s+(?<wkn>[A-Z0-9]{6}).*$") //
                                                         .match("^(?<name>.*?)(ZINSTERMIN.*)$") //
                                                         .match("^(?<nameContinued>.*)$") //
-                                                        .match("^(?i)(ZINS-\\/DIVIDENDENSATZ|(ERTRAGSAUSSCHUETTUNG|ERTRAGSTHESAURIERUNG) P\\. ST\\.) .* ([\\d,.]+\\s+%|(?<currency>[A-Z]{3}))\\s+SCHLUSSTAG PER [\\d]{2}\\.[\\d]{2}\\.[\\d]{4}.*$") //
+                                                        .match("^(?i)(ZINS-\\/DIVIDENDENSATZ|(ERTRAGSAUSSCHUETTUNG|ERTRAGSTHESAURIERUNG) P\\. ST\\.) .* ([\\d,.]+\\s+%|[A-Z]{3})\\s+SCHLUSSTAG PER [\\d]{2}\\.[\\d]{2}\\.[\\d]{4}.*$") //
                                                         .assign((t, v) -> t.setSecurity(getOrCreateSecurity(v))),
                                         
                                         // @formatter:off
@@ -557,11 +587,13 @@ public class ConsorsbankPDFExtractor extends AbstractPDFExtractor
                                                         .assign((t, v) -> t.setExDate(asDate(v.get("exDate")))), //
                                                         
                                         // @formatter:off
-                                        // Zinssatz 3,00 % Schlusstag 21.02.2018
+                                        // Bestand Kupontag
+                                        // 150 EUR 24.02.2018
                                         // @formatter:on
                                         section -> section //
                                                         .attributes("exDate") //
-                                                        .match("^Zinssatz\\s+[\\d,.]+ %\\s+Schlu..?tag\\s+(?<exDate>\\d{2}\\.\\d{2}\\.\\d{4})\\s*$") //
+                                                        .match("^Bestand\\s+Kupontag\\s*$")
+                                                        .match("^.*(?<exDate>\\d{2}\\.\\d{2}\\.\\d{4})\\s*$") //
                                                         .assign((t, v) -> t.setExDate(asDate(v.get("exDate")))) //
                         )
                         

@@ -1394,7 +1394,7 @@ public class ConsorsbankPDFExtractorTest
         assertThat(results, hasItem(purchase( //
                         hasDate("2025-04-09T12:03:33"), hasShares(10000), //
                         hasSource("AnleiheKauf02.txt"), //
-                        hasNote("329893673.001 | Limitkurs 0,280000 %"), //
+                        hasNote("329893673.001 | Limitkurs 0,280000 % | Poolfaktor 0,904761904"), //
                         hasAmount("EUR", 2546.56), hasGrossValue("EUR", 2533.33), //
                         hasTaxes("EUR", 0.00), hasFees("EUR", 1.95 + 6.33 + 4.95))));
     }
@@ -3603,7 +3603,7 @@ public class ConsorsbankPDFExtractorTest
 
         // check dividends transaction
         assertThat(results, hasItem(dividend( //
-                        hasDate("2025-04-10T00:00"), hasExDate(null), //
+                        hasDate("2025-04-10T00:00"), hasExDate("2025-04-01T00:00"), //
                         hasShares(1000.00), //
                         hasSource("Dividende26.txt"), //
                         hasNote(null), //
@@ -3640,7 +3640,7 @@ public class ConsorsbankPDFExtractorTest
 
         // check dividends transaction
         assertThat(results, hasItem(dividend( //
-                        hasDate("2025-04-10T00:00"), hasExDate(null), //
+                        hasDate("2025-04-10T00:00"), hasExDate("2025-04-01T00:00"), //
                         hasShares(1000.00), //
                         hasSource("Dividende26.txt"), //
                         hasNote(null), //
@@ -3998,7 +3998,7 @@ public class ConsorsbankPDFExtractorTest
 
         // check dividends transaction
         assertThat(results, hasItem(dividend( //
-                        hasDate("2018-02-26T00:00"), hasExDate("2018-02-21T00:00"), //
+                        hasDate("2018-02-26T00:00"), hasExDate("2018-02-24T00:00"), //
                         hasShares(1.5), //
                         hasSource("AnleiheZinsen02.txt"), //
                         hasNote(null), //
